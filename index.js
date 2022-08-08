@@ -19,6 +19,9 @@ const {productos} = require('./apiProd')
 const logger = require('./logs/reqLogger')
 const cluster = require('cluster')
 const script = require('bcrypt')
+const {registerUser} = require('./services/userJWT')
+
+
 const saltRounds = 10
 
 const routerProductos = require('./routers/productos')
@@ -88,7 +91,6 @@ app.engine(
 )
 app.set('view engine', '.hbs')
 
-
 /*----------- Passport -----------*/
 
 app.use(passport.initialize())
@@ -106,15 +108,17 @@ passport.use(
         //const usuarioDB = new Usuario()
         const carrito = Carrito.getInstance();
         try {
-          script.hash(password, saltRounds, async function (err, hash) {
-            const newCarrito = await carrito.newCarrito({productos: " "})
-            const carro = newCarrito._id
-            await usuarioDB.save({ mail: username, password: hash, nombre: nombre, edad: edad, direccion: direccion, telefono: telefono, avatar: avatar, idC: carro})
+          const user = await registerUser({username, password, nombre, edad, direccion, telefono, avatar})
+        //   script.hash(password, saltRounds, async function (err, hash) {
+        //     const newCarrito = await carrito.newCarrito({productos: " "})
+        //     const carro = newCarrito._id
+        //     await usuarioDB.save({ mail: username, password: hash, nombre: nombre, edad: edad, direccion: direccion, telefono: telefono, avatar: avatar, idC: carro})
             
-            mail(username, password, nombre, edad, direccion, telefono, avatar)
-        });          
+        //     mail(username, password, nombre, edad, direccion, telefono, avatar)
+        // });          
     
-          done(null, { mail: username })
+          //done(null, { mail: username })
+          done(null, user)
         } catch (error) {
           //loger
           return done(null, false, { message: 'Error al registrar el usuario' })
@@ -268,7 +272,7 @@ app.get('/chat/:email', async (req, res) => {
 })
 
 app.get('/respuestas', async (req, res) => {
-  console.log("aca")
+  //console.log("aca")
   res.render('res')
 })
 
@@ -304,13 +308,20 @@ io.sockets.on('connection', async (socket) => {
   // socket.emit('mensajesU', messagesU)
 
   socket.on('nuevo-msj',async (data) => {
-    const newMsj = await mensaje.save(data)
-
+    console.log(data)
+    await mensaje.save(data)
     mensajes = await mensaje.getAll()
 
     io.sockets.emit('mensajes', mensajes)
   })
 
+  socket.on('nuevo-res',async (data) => {
+    const hola = await mensaje.saveRes(data)
+    console.log(hola)
+    mensajes = await mensaje.getAll()
+
+    io.sockets.emit('mensajes', mensajes)
+  })
 
   // async function usuario(user)
   // {

@@ -46,9 +46,7 @@ function render(data) {
             <span style='color: brown'>${elem.time}</span>: 
             <span>${elem.texto}</span>
             <div class='form-group'><input id='object' name='object' class='form-control' type='hidden' value="${elem.mail}" required /> </div>
-            <span><button onclick = "return response(object)">
-            Responder
-          </button> </span>
+            <span>${elem.tipo}</span>
             </p>
             </div>`
         })
@@ -98,14 +96,32 @@ function addMessage(e) {
 }
 
 async function response(e) {
-    // const mensaje = {
-    //     object: document.getElementById('object').value,
-    // };
+    const mensaje = {
+        mail: document.getElementById('mail').value,
+        texto: document.getElementById('texto').value,
+        pregunta: document.getElementById('pregunta').value
+    };
+    if (!mail.value){
+        alert("Tienes que agregar un mail.")
+        return false;
+    }
+    if (!pregunta.value){
+        alert("Tienes que agregar una pregunta.")
+        return false;
+    }
+    socket.emit('nuevo-res', mensaje);
+    return false;
+    
+    
+    
+    // // const mensaje = {
+    // //     object: document.getElementById('object').value,
+    // // };
 
-    let object = document.getElementById('object').value;
-    console.log(await object)
-    //socket.emit('nuevo-msj', mensaje);
-    return true;
+    // let object = document.getElementById('object').value;
+    // console.log(await object)
+    // //socket.emit('nuevo-msj', mensaje);
+    // return true;
 }
 
 function addProd(e) {
@@ -118,3 +134,9 @@ function addProd(e) {
     socket.emit('new-prod', newProd);
     return false;
 }
+
+
+
+{/* <span><button onclick = "return response(object)">
+            Responder
+          </button> </span> */}
