@@ -16,17 +16,19 @@ class Mensaje {
     }
 
     async save(mensaje) {
+        if (mongoose.connection.readyState === 0) {
+            await this.connectMDB()
+        }
         try {
             let tiempo = new Date()
             let tipo = "usuario"
-            await this.connectMDB()
             mensaje.time = tiempo.toString()
             mensaje.tipo = tipo
             mensaje.pregunta = null
             console.log(mensaje)
             await esquemaMsj.create(mensaje)
             const id = mensaje._id
-            mongoose.disconnect()
+            //mongoose.disconnect()
             return id
         } catch (error) {
             logger.error(error)
@@ -34,15 +36,18 @@ class Mensaje {
     }
 
     async saveRes(mensajeR) {
+        
+        if (mongoose.connection.readyState === 0) {
+            await this.connectMDB()
+        }
         try {
             let tiempo = new Date()
             let tipo = "sistema"
-            await this.connectMDB()
             mensajeR.time = tiempo.toString()
             mensajeR.tipo = tipo
             //console.log(mensajeR)
             await esquemaMsj.create(mensajeR)
-            mongoose.disconnect()
+            //mongoose.disconnect()
             return mensajeR
         } catch (error) {
             console.log(error)
@@ -51,10 +56,12 @@ class Mensaje {
     }
 
     async getAll() {
-        try {
+        if (mongoose.connection.readyState === 0) {
             await this.connectMDB()
+        }
+        try {
             const msj = await esquemaMsj.find({ texto: { $ne: '' } })
-            mongoose.disconnect()
+            //mongoose.disconnect()
             return msj
         } catch (error) {
             logger.error(error)
@@ -62,10 +69,12 @@ class Mensaje {
     }
 
     async getByEmail(email) {
-        try {
+        if (mongoose.connection.readyState === 0) {
             await this.connectMDB()
+        }
+        try {
             const msjId = await esquemaMsj.find({mail: email})
-            mongoose.disconnect()
+            //mongoose.disconnect()
             return msjId
         } catch (error) {
             logger.error(error)

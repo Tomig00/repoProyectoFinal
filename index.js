@@ -130,20 +130,24 @@ passport.use(
   passport.use(
     'login',
     new LocalStrategy(async (username, password, done) => { 
-      let existe
+      //let existe
       
+      const user = await registerUser(username, password)
+      if (!user) {  
+        return done(null, false)
+      } else {
+        return done(null, user)
+      }
+    //   userDB = await usuarioDB.getByUser(username)
       
-      
-      userDB = await usuarioDB.getByUser(username)
-      
-      script.compare(password, userDB?.password??'', function(err, result) {
-        existe = result
-        if (!existe) {  
-          return done(null, false)
-        } else {
-          return done(null, existe)
-        }
-     });
+    //   script.compare(password, userDB?.password??'', function(err, result) {
+    //     existe = result
+    //     if (!existe) {  
+    //       return done(null, false)
+    //     } else {
+    //       return done(null, existe)
+    //     }
+    //  });
       //console.log('ACA USER' + userDB)
     })
   )
