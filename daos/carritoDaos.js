@@ -37,6 +37,7 @@ class Carrito {
             mongoose.disconnect()
             return carrito
         } catch (error) {
+            console.log(error)
             logger.error(error)
         }
     }

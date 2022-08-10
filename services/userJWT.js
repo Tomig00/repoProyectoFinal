@@ -10,23 +10,24 @@ const userDAO = new Usuario()
 const PRIVATE_KEY = 'privateKey'
 
 const registerUser = async (user) => {
+    console.log("ACA ACA")
     const {username, password, nombre, edad, direccion, telefono, avatar } = user
 
-    const oldUser = await userDAO.getByUser(username);
+    // const oldUser = await userDAO.getByUser(username);
 
-    if (oldUser) {
-        throw {
-        status: 409,
-        message: "El usuario ya existe.",
-        };
-    }
+    // if (oldUser) {
+    //     throw {
+    //     status: 409,
+    //     message: "El usuario ya existe.",
+    //     };
+    // }
 
-    if (!username || !password) {
-        throw {
-        status: 400,
-        message: "Ingresar mail y contraseña.",
-        };
-    }
+    // if (!username || !password) {
+    //     throw {
+    //     status: 400,
+    //     message: "Ingresar mail y contraseña.",
+    //     };
+    // }
 
     const token = jwt.sign({ data: username }, PRIVATE_KEY, {
         expiresIn: "600s",

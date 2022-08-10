@@ -41,10 +41,13 @@ class Usuario {
     }
 
       async save(user) {
+        console.log('entro save')
+        console.log(user)
         try {
             await this.connectMDB()
-            await esquemaUser.create(user)
+            const u = await esquemaUser.create(user)
             mongoose.disconnect()
+            console.log(u+'usuario guardado')
         } catch (error) {
             logger.error(error)
         }

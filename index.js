@@ -35,7 +35,7 @@ const io = new IOServer(httpServer)
 const advancedOptions = { useNewUrlParser: true, useUniFiedTopology: true }
 
 
-const usuarioDB = new Usuario()
+const userDAO = new Usuario()
 let userDB
 
 const MODO = process.argv[2] || 'fork'
@@ -106,7 +106,15 @@ passport.use(
         console.log('entro signup')
         
         //const usuarioDB = new Usuario()
-        const carrito = Carrito.getInstance();
+        //const carrito = Carrito.getInstance();
+        const oldUser = await userDAO.getByUser(username);
+
+        if (oldUser) {
+            throw {
+            status: 409,
+            message: "El usuario ya existe.",
+            };
+        }
         try {
           const user = await registerUser({username, password, nombre, edad, direccion, telefono, avatar})
         //   script.hash(password, saltRounds, async function (err, hash) {
@@ -227,7 +235,7 @@ app.get('/login-error', (req, res) => {
 })
 
 app.get('/registrar-error', (req, res) => {
-    res.render('registrar-error')
+    res.render('register-error')
 })
 
 
