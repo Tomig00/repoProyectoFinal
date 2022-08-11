@@ -30,10 +30,15 @@ class Carrito {
         }   
     }
 
-    async newCarrito(dato) {
+    async newCarrito(dato, mail, direccion) {
+        let time = new Date()
+        const carro = {dato}
         try {
             await this.connectMDB()
-            const carrito = await esquemaCart.create(dato)
+            carro.time = time.toDateString()
+            carro.mail = mail
+            carro.direccion = direccion
+            const carrito = await esquemaCart.create(carro)
             mongoose.disconnect()
             return carrito
         } catch (error) {

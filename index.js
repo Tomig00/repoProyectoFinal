@@ -106,27 +106,27 @@ passport.use(
         console.log('entro signup')
         
         //const usuarioDB = new Usuario()
-        //const carrito = Carrito.getInstance();
-        const oldUser = await userDAO.getByUser(username);
+        const carrito = Carrito.getInstance();
+        // const oldUser = await userDAO.getByUser(username);
 
-        if (oldUser) {
-            throw {
-            status: 409,
-            message: "El usuario ya existe.",
-            };
-        }
+        // if (oldUser) {
+        //     throw {
+        //     status: 409,
+        //     message: "El usuario ya existe.",
+        //     };
+        // }
         try {
-          const user = await registerUser({username, password, nombre, edad, direccion, telefono, avatar})
-        //   script.hash(password, saltRounds, async function (err, hash) {
-        //     const newCarrito = await carrito.newCarrito({productos: " "})
-        //     const carro = newCarrito._id
-        //     await usuarioDB.save({ mail: username, password: hash, nombre: nombre, edad: edad, direccion: direccion, telefono: telefono, avatar: avatar, idC: carro})
+        // const user = await registerUser({username, password, nombre, edad, direccion, telefono, avatar})
+          script.hash(password, saltRounds, async function (err, hash) {
+            const newCarrito = await carrito.newCarrito({productos: " "}, username, nombre)
+            const carro = newCarrito._id
+            await userDAO.save({ mail: username, password: hash, nombre: nombre, edad: edad, direccion: direccion, telefono: telefono, avatar: avatar, idC: carro})
             
-        //     mail(username, password, nombre, edad, direccion, telefono, avatar)
-        // });          
+            mail(username, password, nombre, edad, direccion, telefono, avatar)
+        });          
     
-          //done(null, { mail: username })
-          done(null, user)
+          done(null, { mail: username })
+          //done(null, userDB)
         } catch (error) {
           //loger
           return done(null, false, { message: 'Error al registrar el usuario' })
@@ -138,24 +138,24 @@ passport.use(
   passport.use(
     'login',
     new LocalStrategy(async (username, password, done) => { 
-      //let existe
+      let existe
       
-      const user = await registerUser(username, password)
-      if (!user) {  
-        return done(null, false)
-      } else {
-        return done(null, user)
-      }
-    //   userDB = await usuarioDB.getByUser(username)
+      // const user = await registerUser(username, password)
+      // if (!user) {  
+      //   return done(null, false)
+      // } else {
+      //   return done(null, user)
+      // }
+      userDB = await userDAO.getByUser(username)
       
-    //   script.compare(password, userDB?.password??'', function(err, result) {
-    //     existe = result
-    //     if (!existe) {  
-    //       return done(null, false)
-    //     } else {
-    //       return done(null, existe)
-    //     }
-    //  });
+      script.compare(password, userDB?.password??'', function(err, result) {
+        existe = result
+        if (!existe) {  
+          return done(null, false)
+        } else {
+          return done(null, existe)
+        }
+     });
       //console.log('ACA USER' + userDB)
     })
   )
