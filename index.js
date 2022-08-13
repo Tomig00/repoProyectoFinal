@@ -15,6 +15,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')
 const Usuario = require('./daos/userDaos')
 const Carrito = require('./daos/carritoDaos')
+const Ordenes = require('./daos/ordenDaos')
 const {productos} = require('./apiProd')
 const logger = require('./logs/reqLogger')
 const cluster = require('cluster')
@@ -170,7 +171,7 @@ passport.deserializeUser((user, done) => {
 
 /*----------- Rutas -----------*/
 
-app.use('/api/productos', routerProductos)
+app.use('/productos', routerProductos)
 app.use('/api/carrito', routerCarrito)
 
 app.get('/registrar', (req, res) => {
@@ -221,9 +222,11 @@ app.get ('/carrito', async (req, res) => {
 
 app.get('/compra', async (req, res) => {
   const carrito = new Carrito()
+  const orden = new Ordenes()
   carro = userDB.idC
   const productos = await carrito.getProductos(carro)
   const prod = JSON.stringify(productos)
+  await orden.newOrden(prod, userDB.mail)
   mailCompra(userDB.nombre, userDB.mail, prod)
   sendWpp(userDB.nombre, userDB.mail, prod)
   wppComprador(userDB.telefono)

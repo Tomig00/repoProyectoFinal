@@ -3,10 +3,10 @@ const {productosDaos: Producto} = require('../daos/mainDaos')
 const routerProductos = express.Router()
 
 
-routerProductos.get('/:id', async (req, res) => {   
-    const num = req.params.id
+routerProductos.get('/:categoria', async (req, res) => {   
+    const cat = req.params.categoria
     const prod = new Producto()
-    if (num === "all")
+    if (cat === "all")
     {
         try {
             const productos = await prod.getAll()
@@ -26,7 +26,7 @@ routerProductos.get('/:id', async (req, res) => {
         
     }else{
         try {
-            const producto = await prod.getById(num)
+            const producto = await prod.getByCategory(cat)
             res.status(200).send({
                 status: 200,
                 data: {

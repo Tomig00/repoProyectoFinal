@@ -40,13 +40,14 @@ class Producto {
         }
     }
 
-    async getById(id) {
+    async getByCategory(cat) {
         try {
             await this.connectMDB()
-            const prodId = await esquemaProd.findById(id)
+            const productosCat = await esquemaProd.find({categoria: cat})
             mongoose.disconnect()
-            return prodId
+            return productosCat
         } catch (error) {
+            console.log(error)
             logger.error(error)
         }
     }

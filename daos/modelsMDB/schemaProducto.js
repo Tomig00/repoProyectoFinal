@@ -7,6 +7,7 @@ const esquemaProducto = new mongoose.Schema({
     price: {type: Number, require: true},
     thumnail: {type: String, require: true},
     stock: {type: Number, require: true},
+    categoria: {type: String, require: true},
     idP: {type: Number, require: true},
     idC: {type: Number, require: false},
     time: {type: String, require: false}

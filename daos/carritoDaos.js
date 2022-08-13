@@ -36,7 +36,7 @@ class Carrito {
         try {
             await this.connectMDB()
             carro.time = time.toDateString()
-            carro.mail = mail
+            carro.email = mail
             carro.direccion = direccion
             const carrito = await esquemaCart.create(carro)
             mongoose.disconnect()
@@ -52,13 +52,40 @@ class Carrito {
             await this.connectMDB()
             let productoBD = await Productos.getById(idP)
             const cartObjectId = mongoose.Types.ObjectId(idC);
-
+            let producto = JSON.parse(JSON.stringify(productoBD))
+            let existe 
+            let actualizar 
             await this.connectMDB()
-            const carrito = await esquemaCart.updateOne({_id: cartObjectId}, { $push: { productos: productoBD } })
+            const prodInCarro = await esquemaCart.findById(cartObjectId)
+            //console.log(prodInCarro.productos)
+            prodInCarro.productos.find(producto => {
+                console.log(producto._id + "   " + productoBD._id)
+                if (producto._id == productoBD._id) {
+                    console.log("ACA ADENTRO")
+                    actualizar = producto
+                    return existe = true
+                }else {
+                    return existe = false
+                }
+            })
+
+
+            if (existe) {
+                console.log("El producto ya esta en el carrito")
+                producto.cantidad = actualizar.cantidad + 1
+                console.log(producto)
+                await esquemaCart.updateOne({_id: cartObjectId}, {$set: {productos: producto}})
+            }else {
+                producto.cantidad = 1
+                console.log(producto)
+                const carrito = await esquemaCart.updateOne({_id: cartObjectId}, { $push: { productos: producto } })
+            }
+            
             
             mongoose.disconnect()
             //return carrito
         } catch (error) {
+            console.log(error)
             logger.error(error)
         }
     }
