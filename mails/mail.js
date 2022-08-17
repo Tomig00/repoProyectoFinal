@@ -12,12 +12,12 @@ const transporter = nodemailer.createTransport({
     }
 })  
 
-function mail(dat1, dat2, dat3, dat4, dat5, dat6, dat7) {
+function mail(dat1, dat2, dat3, dat4, dat5) {
     const mailOptions = {
         from: 'servidor de correo',
         to: EMAIL,
         subject: 'Nuevo registro',
-        html: `Mail: ${dat1}, Password: ${dat2}, Nombre: ${dat3}, Edad: ${dat4}, Direccion: ${dat5}, Telefono: ${dat6}, Avatar: ${dat7}`
+        html: `Mail: ${dat1}, Password: ${dat2}, Nombre: ${dat3}, Telefono: ${dat6}, CarroID: ${dat5}`
     }
     async function sendMail() {
     try{

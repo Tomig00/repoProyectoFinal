@@ -95,7 +95,7 @@ app.set('view engine', '.hbs')
 /*----------- Passport -----------*/
 
 app.use(passport.initialize())
-app.use(passport.session())
+//app.use(passport.session())
 
 passport.use(
     'register',
@@ -103,9 +103,12 @@ passport.use(
     new LocalStrategy(
       { passReqToCallback: true },
       async (req, username, password, done ) => {
-        const {nombre, edad, direccion, telefono, avatar} = req.body
+        const {nombre, telefono, passwordC} = req.body
         console.log('entro signup')
         
+        if (password !== passwordC) {
+          return done(null, false, { message: 'Las contraseñas no coinciden' })
+        }
         //const usuarioDB = new Usuario()
         const carrito = Carrito.getInstance();
         // const oldUser = await userDAO.getByUser(username);
@@ -121,9 +124,9 @@ passport.use(
           script.hash(password, saltRounds, async function (err, hash) {
             const newCarrito = await carrito.newCarrito({productos: " "}, username, nombre)
             const carro = newCarrito._id
-            await userDAO.save({ mail: username, password: hash, nombre: nombre, edad: edad, direccion: direccion, telefono: telefono, avatar: avatar, idC: carro})
+            await userDAO.save({ mail: username, password: hash, nombre: nombre, telefono: telefono, idC: carro})
             
-            mail(username, password, nombre, edad, direccion, telefono, avatar)
+            mail(username, password, nombre, telefono, carro)
         });          
     
           done(null, { mail: username })
@@ -179,6 +182,7 @@ app.get('/registrar', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
+  console.log("aca")
     req.logOut(function(err) {
         if (err) { return next(err); }})
     res.render('login')
@@ -273,7 +277,7 @@ const mensaje = new Mensaje()
 let mensajes = []
 
 app.get('/chat', (req, res) => {
-  res.sendFile(path.resolve("public/index.html"));
+  res.sendFile(path.resolve("public/chat.html"));
 })
 
 app.get('/chat/:email', async (req, res) => {
