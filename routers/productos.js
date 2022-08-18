@@ -2,48 +2,51 @@ const express = require('express')
 const {productosDaos: Producto} = require('../daos/mainDaos')
 const routerProductos = express.Router()
 
+const Handlebars = require('handlebars')
+const hbs = require('express-handlebars')
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
+const app = express()
+
+app.set('views', './src/views')
+
+app.engine(
+  '.hbs',
+  hbs.engine({
+    defaultLayout: 'main',
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    layoutsDir: './src/views/layouts',
+    extname: '.hbs',
+  })
+)
+app.set('view engine', '.hbs')
 
 routerProductos.get('/:categoria', async (req, res) => {   
     const cat = req.params.categoria
     const prod = new Producto()
-    if (cat === "all")
-    {
-        try {
-            const productos = await prod.getAll()
-            res.status(200).send({
-                status: 200,
-                data: {
-                    productos,
-                },
-                message:'productos encontrados'
-                })
-        } catch (error) {
-            res.status(500).send({
-                status: 500,
-                message: error.message
-            })
-        }
-        
-    }else{
-        try {
-            const producto = await prod.getByCategory(cat)
-            res.status(200).send({
-                status: 200,
-                data: {
-                    producto,
-                },
-                message:'producto encontrado'
-                })
-        } catch (error) {
-            res.status(500).send({
-                status: 500,
-                message: error.message
-            })
-        }
-    } 
+
+    try {
+        const producto = await prod.getByCategory(cat)
+        res.status(200).render('prodFound', { prod: producto})
+    } catch (error) {
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
 })
 
+routerProductos.get('/id/:id', async (req, res) => {   
+    const id = req.params.id
+    const prod = new Producto()
 
+    try {
+        const producto = await prod.getById(id)
+        console.log(producto)
+        res.status(200).render('prodFound', { prod: producto})
+    } catch (error) {
+        res.status(500).render('prodNotFound')
+    }
+})
 
 
 

@@ -202,6 +202,38 @@ app.post(
     })
 )
 
+app.get('/login-error', (req, res) => {
+  res.render('login-error')
+})
+
+app.get('/registrar-error', (req, res) => {
+  res.render('register-error')
+})
+
+
+app.get('/main', (req, res) => {
+  //envio de productos a la vista datos.hbs
+  productos().then(productos => { 
+      //console.log(productos)
+      req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
+  })
+  //res.sendFile(path.resolve("public/index.html"))
+  //console.log(req.session)
+})
+
+app.get('/logout', (req, res) => {
+  req.logOut(function(err) {
+      if (err) { return next(err); }})
+  res.redirect('/login')
+})
+
+app.get('/', (req, res) => {
+  res.redirect('/login')
+})
+
+
+/*----------- CARRITO -----------*/
+
 app.post ('/addProdToCart', async (req, res) => {
   const {id} = req.body
   //const idC = Handlebars.Utils.isArray(id)
@@ -237,41 +269,32 @@ app.get('/compra', async (req, res) => {
   res.redirect('/main')
 })
 
-app.get('/login-error', (req, res) => {
-    res.render('login-error')
-})
-
-app.get('/registrar-error', (req, res) => {
-    res.render('register-error')
-})
-
-
-app.get('/main', (req, res) => {
-    //envio de productos a la vista datos.hbs
-    productos().then(productos => { 
-        //console.log(productos)
-        req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
-    })
-    //res.sendFile(path.resolve("public/index.html"))
-    //console.log(req.session)
-})
-
-app.get('/logout', (req, res) => {
-    req.logOut(function(err) {
-        if (err) { return next(err); }})
-    res.redirect('/login')
-})
-
-app.get('/', (req, res) => {
-    res.redirect('/login')
-})
 
 // app.use((req, res, next) => {
 //   logger.warn(`Ruta: ${req.path} - Método: ${req.method}`),
 //   next()
 // })
 
-//chat io connecition
+/*----------- INFO -----------*/
+
+app.get('/info', (req, res) => {
+  const { argv, execPath, platform, version, pid, memoryUsage, cwd } = process;
+  const { rss } = memoryUsage();
+  res.render("info", {
+    layout: "main",
+    argv,
+    execPath,
+    platform,
+    version,
+    pid,
+    rss,
+    currentDir: cwd(),
+  });
+})
+
+
+/*----------- CHAT -----------*/
+
 const Mensaje = require('./daos/mensajeDaos.js')
 const mensaje = new Mensaje()
 let mensajes = []
@@ -282,16 +305,12 @@ app.get('/chat', (req, res) => {
 
 app.get('/chat/:email', async (req, res) => {
   const email = req.params.email
-  // const textos = await mensaje.getByEmail(email)
-  // console.log(textos)
   mensaje.getByEmail(email).then(msj => { 
-    //console.log(msj + "ACA")
     res.render('chat', {text: msj})
   })
 })
 
 app.get('/respuestas', async (req, res) => {
-  //console.log("aca")
   res.render('res')
 })
 
