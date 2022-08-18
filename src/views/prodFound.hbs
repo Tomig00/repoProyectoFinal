@@ -15,6 +15,7 @@
   />
 </head>
 <body>
+  <script src="/routers/productos.js"></script>
   <div class="card-body">
           <form action="http://localhost:8081/carrito" method="get">  
               <button class="btn btn-primary btn-block" type="submit">
@@ -49,6 +50,9 @@
                           role='form'
                           autocomplete='off'
                         >
+                      <div class="form-group">
+                          <input  id="cant" name='cant' placeholder="cantidad" style="color: white;" class="form-control" type="number" required>
+                      </div>
                       <div class='form-group'><input id='id' name='id' class='form-control' type='hidden' value="{{this._id}}" required /> </div>
                       <div class='form-group'>
                         <input class='btn btn-primary add-button' type='submit' value='add' />  
@@ -66,6 +70,7 @@
       </div>
     </div>
   </div>
+
 </body>
 
 

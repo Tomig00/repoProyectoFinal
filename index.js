@@ -22,6 +22,7 @@ const cluster = require('cluster')
 const script = require('bcrypt')
 const {registerUser} = require('./services/userJWT')
 
+const CPUs = require('os').cpus().length
 
 const saltRounds = 10
 
@@ -235,9 +236,10 @@ app.get('/', (req, res) => {
 /*----------- CARRITO -----------*/
 
 app.post ('/addProdToCart', async (req, res) => {
-  const {id} = req.body
+  const {id, cant} = req.body
   //const idC = Handlebars.Utils.isArray(id)
   console.log(id)
+  console.log(cant)
   console.log("ACA IDC USER" + userDB.idC)
   carro = userDB.idC
   const carrito = new Carrito()
@@ -288,6 +290,7 @@ app.get('/info', (req, res) => {
     version,
     pid,
     rss,
+    CPUs,
     currentDir: cwd(),
   });
 })

@@ -55,7 +55,7 @@ class Producto {
     async getById(id) {
         try {
             await this.connectMDB()
-            const prodId = await esquemaProd.findById(id)
+            const prodId = await esquemaProd.find({_id: id})
             mongoose.disconnect()
             return prodId
         } catch (error) {

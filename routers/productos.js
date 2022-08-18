@@ -20,6 +20,8 @@ app.engine(
 )
 app.set('view engine', '.hbs')
 
+
+
 routerProductos.get('/:categoria', async (req, res) => {   
     const cat = req.params.categoria
     const prod = new Producto()
@@ -41,7 +43,6 @@ routerProductos.get('/id/:id', async (req, res) => {
 
     try {
         const producto = await prod.getById(id)
-        console.log(producto)
         res.status(200).render('prodFound', { prod: producto})
     } catch (error) {
         res.status(500).render('prodNotFound')
