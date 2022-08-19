@@ -96,7 +96,7 @@ app.set('view engine', '.hbs')
 /*----------- Passport -----------*/
 
 app.use(passport.initialize())
-//app.use(passport.session())
+app.use(passport.session())
 
 passport.use(
     'register',
@@ -183,7 +183,7 @@ app.get('/registrar', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-  console.log("aca")
+  //console.log("aca")
     req.logOut(function(err) {
         if (err) { return next(err); }})
     res.render('login')
@@ -238,13 +238,13 @@ app.get('/', (req, res) => {
 app.post ('/addProdToCart', async (req, res) => {
   const {id, cant} = req.body
   //const idC = Handlebars.Utils.isArray(id)
-  console.log(id)
-  console.log(cant)
-  console.log("ACA IDC USER" + userDB.idC)
+  // console.log(id + "esto")
+  // console.log(cant + "esto2")
+  // console.log("ACA IDC USER" + userDB.idC)
   carro = userDB.idC
   const carrito = new Carrito()
 
-  await carrito.addProducto(carro, id)
+  await carrito.addProducto(carro, id, cant)
   //await carrito.addProducto(id)
   productos().then(productos => { 
     req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')

@@ -28,7 +28,8 @@ routerProductos.get('/:categoria', async (req, res) => {
 
     try {
         const producto = await prod.getByCategory(cat)
-        res.status(200).render('prodFound', { prod: producto})
+        //res.status(200).render('prodFound', { prod: producto})
+        req.isAuthenticated() ? res.render('prodFound', {prod: producto}) : res.redirect('/login')
     } catch (error) {
         res.status(500).send({
             status: 500,

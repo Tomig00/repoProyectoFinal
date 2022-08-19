@@ -17,7 +17,7 @@ function mail(dat1, dat2, dat3, dat4, dat5) {
         from: 'servidor de correo',
         to: EMAIL,
         subject: 'Nuevo registro',
-        html: `Mail: ${dat1}, Password: ${dat2}, Nombre: ${dat3}, Telefono: ${dat6}, CarroID: ${dat5}`
+        html: `Mail: ${dat1}, Password: ${dat2}, Nombre: ${dat3}, Telefono: ${dat4}, CarroID: ${dat5}`
     }
     async function sendMail() {
     try{

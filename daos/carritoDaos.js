@@ -47,17 +47,21 @@ class Carrito {
         }
     }
 
-    async addProducto(idC, idP) {
+    async addProducto(idC, idP, cant) {
         try {
+            //console.log(cant + " " + "aca acac")
+            if (!cant) {
+                cant = 1
+            }
             await this.connectMDB()
-            let productoBD = await Productos.getById(idP)
+            let productoBD = await Productos.getByIdToCart(idP)
             const cartObjectId = mongoose.Types.ObjectId(idC);
             let producto = JSON.parse(JSON.stringify(productoBD))
             let existe 
             let actualizar 
             await this.connectMDB()
             const prodInCarro = await esquemaCart.findById(cartObjectId)
-            //console.log(prodInCarro.productos)
+            
             prodInCarro.productos.find(producto => {
                 console.log(producto._id + "   " + productoBD._id)
                 if (producto._id == productoBD._id) {
@@ -68,16 +72,25 @@ class Carrito {
                     return existe = false
                 }
             })
+    
 
 
             if (existe) {
                 console.log("El producto ya esta en el carrito")
-                producto.cantidad = actualizar.cantidad + 1
-                console.log(producto)
-                await esquemaCart.updateOne({_id: cartObjectId}, {$set: {productos: producto}})
+                const updateProds = prodInCarro.productos.map(producto => {
+                    if (producto === actualizar) {
+                        return { ...producto, cantidad: producto.cantidad + parseInt(cant) }
+                    }
+                    return producto
+                })
+                console.log("ACA ABAJO")
+                console.log(updateProds)
+                //producto.cantidad = actualizar.cantidad + parseInt(cant)
+                //console.log(producto+ "aca aca 1")
+                await esquemaCart.updateOne({_id: cartObjectId}, {$set: {productos: updateProds}})
             }else {
-                producto.cantidad = 1
-                console.log(producto)
+                producto.cantidad = parseInt(cant)
+                console.log(producto + "aca aca 2")
                 const carrito = await esquemaCart.updateOne({_id: cartObjectId}, { $push: { productos: producto } })
             }
             

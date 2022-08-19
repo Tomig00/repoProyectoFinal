@@ -63,6 +63,17 @@ class Producto {
         }
     }
 
+    async getByIdToCart(id) {
+        try {
+            await this.connectMDB()
+            const prodId = await esquemaProd.findById(id)
+            mongoose.disconnect()
+            return prodId
+        } catch (error) {
+            logger.error(error)
+        }
+    }
+
     async changeById(id, cambio) {
         try {
             await this.connectMDB()
