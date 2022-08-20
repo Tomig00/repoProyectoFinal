@@ -26,8 +26,10 @@ const CPUs = require('os').cpus().length
 
 const saltRounds = 10
 
+//const app = require('./routers/principalRouter')
 const routerProductos = require('./routers/productos')
 const routerCarrito = require('./routers/carrito')
+
 const routerChat = require('./routers/chat')
 const { json } = require('express')
 
@@ -175,100 +177,104 @@ passport.deserializeUser((user, done) => {
 
 /*----------- Rutas -----------*/
 
+
 app.use('/productos', routerProductos)
 app.use('/api/carrito', routerCarrito)
 
+
+/*----------- LOGIN -----------*/
+
 app.get('/registrar', (req, res) => {
-    res.render('register')
+  res.render('register')
 })
 
 app.get('/login', (req, res) => {
-  //console.log("aca")
-    req.logOut(function(err) {
-        if (err) { return next(err); }})
-    res.render('login')
+//console.log("aca")
+  req.logOut(function(err) {
+      if (err) { return next(err); }})
+  res.render('login')
 })
 
 app.post('/login', passport.authenticate('login', {
-    successRedirect: '/main',
-    failureRedirect: '/login-error'
+  successRedirect: '/main',
+  failureRedirect: '/login-error'
 })
 )
 
 app.post(
-    '/register',
-    passport.authenticate('register', {
-      successRedirect: '/login',
-      failureRedirect: '/registrar-error',
-    })
+  '/register',
+  passport.authenticate('register', {
+    successRedirect: '/login',
+    failureRedirect: '/registrar-error',
+  })
 )
 
 app.get('/login-error', (req, res) => {
-  res.render('login-error')
+res.render('login-error')
 })
 
 app.get('/registrar-error', (req, res) => {
-  res.render('register-error')
+res.render('register-error')
 })
 
 
 app.get('/main', (req, res) => {
-  //envio de productos a la vista datos.hbs
-  productos().then(productos => { 
-      //console.log(productos)
-      req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
-  })
-  //res.sendFile(path.resolve("public/index.html"))
-  //console.log(req.session)
+//envio de productos a la vista datos.hbs
+productos().then(productos => { 
+    //console.log(productos)
+    req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
+})
+//res.sendFile(path.resolve("public/index.html"))
+//console.log(req.session)
 })
 
 app.get('/logout', (req, res) => {
-  req.logOut(function(err) {
-      if (err) { return next(err); }})
-  res.redirect('/login')
+req.logOut(function(err) {
+    if (err) { return next(err); }})
+res.redirect('/login')
 })
 
 app.get('/', (req, res) => {
-  res.redirect('/login')
+res.redirect('/login')
 })
 
 
 /*----------- CARRITO -----------*/
 
 app.post ('/addProdToCart', async (req, res) => {
-  const {id, cant} = req.body
-  //const idC = Handlebars.Utils.isArray(id)
-  // console.log(id + "esto")
-  // console.log(cant + "esto2")
-  // console.log("ACA IDC USER" + userDB.idC)
-  carro = userDB.idC
-  const carrito = new Carrito()
+const {id, cant} = req.body
+//const idC = Handlebars.Utils.isArray(id)
+// console.log(id + "esto")
+// console.log(cant + "esto2")
+// console.log("ACA IDC USER" + userDB.idC)
+carro = userDB.idC
+const carrito = new Carrito()
 
-  await carrito.addProducto(carro, id, cant)
-  //await carrito.addProducto(id)
-  productos().then(productos => { 
-    req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
-  })
+await carrito.addProducto(carro, id, cant)
+//await carrito.addProducto(id)
+productos().then(productos => { 
+  req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
 })
-      
+})
+    
 app.get ('/carrito', async (req, res) => { 
-  const carrito = new Carrito()
-  carro = userDB.idC
-  const productos = await carrito.getProductos(carro)
-  req.isAuthenticated() ? res.render('carrito', {prod: productos}) : res.redirect('/login')
+const carrito = new Carrito()
+carro = userDB.idC
+const productos = await carrito.getProductos(carro)
+req.isAuthenticated() ? res.render('carrito', {prod: productos}) : res.redirect('/login')
 })
 
 app.get('/compra', async (req, res) => {
-  const carrito = new Carrito()
-  const orden = new Ordenes()
-  carro = userDB.idC
-  const productos = await carrito.getProductos(carro)
-  const prod = JSON.stringify(productos)
-  await orden.newOrden(prod, userDB.mail)
-  mailCompra(userDB.nombre, userDB.mail, prod)
-  sendWpp(userDB.nombre, userDB.mail, prod)
-  wppComprador(userDB.telefono)
-  res.redirect('/main')
+const carrito = new Carrito()
+const orden = new Ordenes()
+carro = userDB.idC
+const productos = await carrito.getProductos(carro)
+const prod = JSON.stringify(productos)
+await orden.newOrden(prod, userDB.mail)
+mailCompra(userDB.nombre, userDB.mail, prod)
+sendWpp(userDB.nombre, userDB.mail, prod)
+wppComprador(userDB.telefono)
+res.redirect('/main')
 })
 
 
@@ -280,21 +286,20 @@ app.get('/compra', async (req, res) => {
 /*----------- INFO -----------*/
 
 app.get('/info', (req, res) => {
-  const { argv, execPath, platform, version, pid, memoryUsage, cwd } = process;
-  const { rss } = memoryUsage();
-  res.render("info", {
-    layout: "main",
-    argv,
-    execPath,
-    platform,
-    version,
-    pid,
-    rss,
-    CPUs,
-    currentDir: cwd(),
-  });
+const { argv, execPath, platform, version, pid, memoryUsage, cwd } = process;
+const { rss } = memoryUsage();
+res.render("info", {
+  layout: "main",
+  argv,
+  execPath,
+  platform,
+  version,
+  pid,
+  rss,
+  CPUs,
+  currentDir: cwd(),
+});
 })
-
 
 /*----------- CHAT -----------*/
 

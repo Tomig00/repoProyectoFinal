@@ -34,6 +34,7 @@
               <th>Nombre</th>
               <th>Precio</th>
               <th>Foto</th>
+              <th>Cantidad</th>
             </tr>
             {{#if prod}}
               {{#each prod}}
@@ -41,6 +42,7 @@
                   <td>{{this.name}}</td>
                   <td>{{this.price}}</td>
                   <td><IMG SRC="{{this.thumnail}}"ALIGN=MIDDLE WIDTH=192 HEIGHT=92 ALT="AQUI VA UNA IMAGEN"></td>
+                  <td>{{this.cantidad}}</td>
                 </tr>
               {{/each}}
             {{else}}
