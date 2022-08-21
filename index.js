@@ -16,7 +16,7 @@ const MongoStore = require('connect-mongo')
 const Usuario = require('./daos/userDaos')
 const Carrito = require('./daos/carritoDaos')
 const Ordenes = require('./daos/ordenDaos')
-const {productos} = require('./apiProd')
+const {PORT, MONGO_URL, SECRET} = require('./config')
 const logger = require('./logs/reqLogger')
 const cluster = require('cluster')
 const script = require('bcrypt')
@@ -26,9 +26,7 @@ const CPUs = require('os').cpus().length
 
 const saltRounds = 10
 
-//const app = require('./routers/principalRouter')
-const routerProductos = require('./routers/productos')
-const routerCarrito = require('./routers/carrito')
+const routerPrincipal = require('./routers/principalRouter')
 
 const routerChat = require('./routers/chat')
 const { json } = require('express')
@@ -40,7 +38,7 @@ const advancedOptions = { useNewUrlParser: true, useUniFiedTopology: true }
 
 
 const userDAO = new Usuario()
-let userDB
+global.userDB = {} 
 
 const MODO = process.argv[2] || 'fork'
 
@@ -72,11 +70,11 @@ app.use(express.json())
 app.use(cookieParser('secreto'))
 app.use(session({
   store: MongoStore.create({
-    mongoUrl: 'mongodb+srv://tomasSesiones:asd123@tomi.fuaxu.mongodb.net/sesiones?retryWrites=true&w=majority',
+    mongoUrl: MONGO_URL,
     mongoOptions: advancedOptions,
     ttl: 30
   }),
-  secret: 'secreto',
+  secret: SECRET,
   resave: true,
   saveUninitialized: true
 }))
@@ -177,129 +175,8 @@ passport.deserializeUser((user, done) => {
 
 /*----------- Rutas -----------*/
 
+app.use('/', routerPrincipal)
 
-app.use('/productos', routerProductos)
-app.use('/api/carrito', routerCarrito)
-
-
-/*----------- LOGIN -----------*/
-
-app.get('/registrar', (req, res) => {
-  res.render('register')
-})
-
-app.get('/login', (req, res) => {
-//console.log("aca")
-  req.logOut(function(err) {
-      if (err) { return next(err); }})
-  res.render('login')
-})
-
-app.post('/login', passport.authenticate('login', {
-  successRedirect: '/main',
-  failureRedirect: '/login-error'
-})
-)
-
-app.post(
-  '/register',
-  passport.authenticate('register', {
-    successRedirect: '/login',
-    failureRedirect: '/registrar-error',
-  })
-)
-
-app.get('/login-error', (req, res) => {
-res.render('login-error')
-})
-
-app.get('/registrar-error', (req, res) => {
-res.render('register-error')
-})
-
-
-app.get('/main', (req, res) => {
-//envio de productos a la vista datos.hbs
-productos().then(productos => { 
-    //console.log(productos)
-    req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
-})
-//res.sendFile(path.resolve("public/index.html"))
-//console.log(req.session)
-})
-
-app.get('/logout', (req, res) => {
-req.logOut(function(err) {
-    if (err) { return next(err); }})
-res.redirect('/login')
-})
-
-app.get('/', (req, res) => {
-res.redirect('/login')
-})
-
-
-/*----------- CARRITO -----------*/
-
-app.post ('/addProdToCart', async (req, res) => {
-const {id, cant} = req.body
-//const idC = Handlebars.Utils.isArray(id)
-// console.log(id + "esto")
-// console.log(cant + "esto2")
-// console.log("ACA IDC USER" + userDB.idC)
-carro = userDB.idC
-const carrito = new Carrito()
-
-await carrito.addProducto(carro, id, cant)
-//await carrito.addProducto(id)
-productos().then(productos => { 
-  req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
-})
-})
-    
-app.get ('/carrito', async (req, res) => { 
-const carrito = new Carrito()
-carro = userDB.idC
-const productos = await carrito.getProductos(carro)
-req.isAuthenticated() ? res.render('carrito', {prod: productos}) : res.redirect('/login')
-})
-
-app.get('/compra', async (req, res) => {
-const carrito = new Carrito()
-const orden = new Ordenes()
-carro = userDB.idC
-const productos = await carrito.getProductos(carro)
-const prod = JSON.stringify(productos)
-await orden.newOrden(prod, userDB.mail)
-mailCompra(userDB.nombre, userDB.mail, prod)
-sendWpp(userDB.nombre, userDB.mail, prod)
-wppComprador(userDB.telefono)
-res.redirect('/main')
-})
-
-
-// app.use((req, res, next) => {
-//   logger.warn(`Ruta: ${req.path} - Método: ${req.method}`),
-//   next()
-// })
-
-/*----------- INFO -----------*/
-
-app.get('/info', (req, res) => {
-const { argv, execPath, platform, version, pid, memoryUsage, cwd } = process;
-const { rss } = memoryUsage();
-res.render("info", {
-  layout: "main",
-  argv,
-  execPath,
-  platform,
-  version,
-  pid,
-  rss,
-  CPUs,
-  currentDir: cwd(),
-});
-})
 
 /*----------- CHAT -----------*/
 
@@ -307,24 +184,9 @@ const Mensaje = require('./daos/mensajeDaos.js')
 const mensaje = new Mensaje()
 let mensajes = []
 
-app.get('/chat', (req, res) => {
-  res.sendFile(path.resolve("public/chat.html"));
-})
-
-app.get('/chat/:email', async (req, res) => {
-  const email = req.params.email
-  mensaje.getByEmail(email).then(msj => { 
-    res.render('chat', {text: msj})
-  })
-})
-
-app.get('/respuestas', async (req, res) => {
-  res.render('res')
-})
-
 
 /* Server Listen */
-const PORT = process.env.PORT || 8081
+//const PORT = process.env.PORT || 8081
 const server = httpServer.listen(PORT , () => console.log(`servidor Levantado ${PORT}`))
 server.on('error', (error) => console.log(`Error en servidor ${error}`))
 io.listen(httpServer)

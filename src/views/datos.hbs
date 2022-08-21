@@ -16,7 +16,7 @@
 </head>
 <body>
   <div class="card-body">
-          <form action="http://localhost:8081/carrito" method="get">  
+          <form action="http://localhost:8081/api/carrito/viewCart" method="get">  
               <button class="btn btn-primary btn-block" type="submit">
                 Carrito
               </button>
@@ -44,7 +44,7 @@
                   <td>
                     <form
                           class='form'
-                          action='/addProdToCart'
+                          action='/api/carrito/addProdToCart'
                           method='post'
                           role='form'
                           autocomplete='off'
