@@ -1,7 +1,8 @@
 const nodemailer = require('nodemailer')
 const logger = require('../logs/reqLogger')
 
-const EMAIL = 'tomas.guzzo2003@gmail.com'
+const { MAIL } = require('../config')
+//const EMAIL = 
 
 
 const transporter = nodemailer.createTransport({
@@ -15,7 +16,7 @@ const transporter = nodemailer.createTransport({
 function mail(dat1, dat2, dat3, dat4, dat5) {
     const mailOptions = {
         from: 'servidor de correo',
-        to: EMAIL,
+        to: MAIL,
         subject: 'Nuevo registro',
         html: `Mail: ${dat1}, Password: ${dat2}, Nombre: ${dat3}, Telefono: ${dat4}, CarroID: ${dat5}`
     }
@@ -32,7 +33,7 @@ function mail(dat1, dat2, dat3, dat4, dat5) {
 function mailCompra(dat1, dat2, dat3) {
     const mailOptions = {
         from: 'servidor de correo',
-        to: EMAIL,
+        to: MAIL,
         subject: `Nuevo pedido de: ${dat1}, mail: ${dat2}`,
         html: `Productos que copro: ${dat3}`
     }

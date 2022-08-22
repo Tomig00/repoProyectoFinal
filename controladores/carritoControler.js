@@ -1,9 +1,12 @@
 
-const {carritoDaos: Carrito} = require('../daos/mainDaos')
-const Carro = new Carrito()
+// const {carritoDaos: Carrito} = require('../daos/mainDaos')
+// const Carro = new Carrito()
 const {productos} = require('../apiProd')
+const { apiOrdenes } = require('../api/apiOrdenes')
+const { apiCarrito } = require('../api/apiCarrito')
 
-const Ordenes = require('../daos/ordenDaos')
+const Carro = new apiCarrito()
+//const Ordenes = require('../daos/ordenDaos')
 
 const sisCarrito = {
     newCarrito: async (req, res) => {
@@ -93,7 +96,7 @@ const sisCarrito = {
         // console.log(cant + "esto2")
         // console.log("ACA IDC USER" + global.userDB.idC)
         const carro = global.userDB.idC
-        const carrito = new Carrito()
+        const carrito = new apiCarrito()
       
         await carrito.addProducto(carro, id, cant)
         //await carrito.addProducto(id)
@@ -103,15 +106,15 @@ const sisCarrito = {
     },
 
     viewCart: async (req, res) => { 
-        const carrito = new Carrito()
+        const carrito = new apiCarrito()
         const carro = global.userDB.idC
         const productos = await carrito.getProductos(carro)
         req.isAuthenticated() ? res.render('carrito', {prod: productos}) : res.redirect('/login')
     },
     
     buy: async (req, res) => {
-        const carrito = new Carrito()
-        const orden = new Ordenes()
+        const carrito = new apiCarrito()
+        const orden = new apiOrdenes()
         const carro = global.userDB.idC
         const productos = await carrito.getProductos(carro)
         const prod = JSON.stringify(productos)

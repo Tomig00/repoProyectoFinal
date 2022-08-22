@@ -1,10 +1,11 @@
 
-const {productosDaos: Producto} = require('../daos/productoDaos')
+//const {productosDaos: apiProducto} = require('../daos/mainDaos')
+const apiProducto = require('../api/apiProductos')
 
 const sisProd = {
     categoria: async (req, res) => {   
         const cat = req.params.categoria
-        const prod = new Producto()
+        const prod = new apiProducto()
     
         try {
             const producto = await prod.getByCategory(cat)
@@ -20,7 +21,7 @@ const sisProd = {
     
     id: async (req, res) => {   
         const id = req.params.id
-        const prod = new Producto()
+        const prod = new apiProducto()
     
         try {
             const producto = await prod.getById(id)
@@ -32,7 +33,7 @@ const sisProd = {
 
     addProd: async (req, res) => { 
         try {
-            const prod = new Producto()
+            const prod = new apiProducto()
             const id = await prod.save(req.body)
             res.status(200).send({
                 status: 200,
@@ -53,7 +54,7 @@ const sisProd = {
         const num = req.params.id
         try {
             let idProd = parseInt(num)
-            const prod = new Producto()
+            const prod = new apiProducto()
             const cambio = req.body
             const cambiado = await prod.changeById(idProd, cambio)
             res.status(200).send({
@@ -75,7 +76,7 @@ const sisProd = {
         const num = req.params.id
         try {
             let idProd = parseInt(num)
-            const prod = new Producto()
+            const prod = new apiProducto()
             const borrar = await prod.deleteById(idProd)
             res.status(200).send({
                 status: 200,

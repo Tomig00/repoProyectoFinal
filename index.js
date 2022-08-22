@@ -65,7 +65,6 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
 
-
 /*----------- Session -----------*/
 app.use(cookieParser('secreto'))
 app.use(session({

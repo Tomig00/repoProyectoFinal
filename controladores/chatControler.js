@@ -1,7 +1,9 @@
 const passport = require('passport')
 const logger = require('../logs/reqLogger')
 
-const Mensaje = require('../daos/mensajeDaos.js')
+// const Mensaje = require('../daos/mensajeDaos.js')
+// const mensaje = new Mensaje()
+const Mensaje = requiere('../api/apiMensaje.js')
 const mensaje = new Mensaje()
 const path = require('path')
 
