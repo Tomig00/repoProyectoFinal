@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const esquemaUser = require('./modelsMDB/schemaUser')
 const logger = require('../../logs/reqLogger')
-
+const { MONGO_URL } = require('../../config')
 
 class Usuario {
     async connectMDB() {
         try {
-            const URL = "mongodb+srv://tomasSesiones:asd123@tomi.fuaxu.mongodb.net/sesiones?retryWrites=true&w=majority"
+            const URL = MONGO_URL
             let rta = await mongoose.connect(URL, {
                 useNewUrlParser: true,
                 useUniFiedTopology: true

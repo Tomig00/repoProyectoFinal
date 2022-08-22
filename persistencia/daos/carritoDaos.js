@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const esquemaCart = require('./modelsMDB/schemaCarrito')
 const Producto = require('./productoDaos')
 const logger = require('../../logs/reqLogger')
-const Joi = require('joi')
+const { MONGO_URL } = require('../../config')
 
 let instance = null
 
@@ -18,20 +18,11 @@ class Carrito {
         }
         return instance
     }
-    
-    static validarCarrito (carrito) {
-        const schema = {
-            productos: Joi.array().items(Joi.object().keys({
-                _id: Joi.string().required(),
-                cantidad: Joi.number().required()
-            }))
-        }
-        return Joi.validate(carrito, schema)
-    }
+
 
     async connectMDB() {
         try {
-            const URL = "mongodb+srv://tomasSesiones:asd123@tomi.fuaxu.mongodb.net/sesiones?retryWrites=true&w=majority"
+            const URL = MONGO_URL
             let rta = await mongoose.connect(URL, {
                 useNewUrlParser: true,
                 useUniFiedTopology: true

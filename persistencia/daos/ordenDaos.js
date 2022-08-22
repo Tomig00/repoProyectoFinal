@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const esquemaOrden = require('./modelsMDB/schemaOrden')
 const Producto = require('./productoDaos')
 const logger = require('../../logs/reqLogger')
+const { MONGO_URL } = require('../../config')
 
 let instance = null
 
@@ -20,7 +21,7 @@ class Ordenes {
     
     async connectMDB() {
         try {
-            const URL = "mongodb+srv://tomasSesiones:asd123@tomi.fuaxu.mongodb.net/sesiones?retryWrites=true&w=majority"
+            const URL = MONGO_URL
             let rta = await mongoose.connect(URL, {
                 useNewUrlParser: true,
                 useUniFiedTopology: true
