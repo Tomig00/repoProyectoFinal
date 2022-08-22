@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const esquemaProd = require('./modelsMDB/schemaProducto')
-const logger = require('../logs/reqLogger')
+const logger = require('../../logs/reqLogger')
 
 class Producto {
     async connectMDB() {

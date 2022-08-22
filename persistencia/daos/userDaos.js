@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const esquemaUser = require('./modelsMDB/schemaUser')
-const logger = require('../logs/reqLogger')
+const logger = require('../../logs/reqLogger')
 
 
 class Usuario {

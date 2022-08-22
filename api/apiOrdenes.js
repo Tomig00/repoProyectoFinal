@@ -1,9 +1,9 @@
-const {ordenDaos: Ordenes} = require('../daos/mainDaos')
-
+const {ordenDaos: Ordenes} = require('../persistencia/daos/mainDaos')
+const Orden = new Ordenes()
 
 class apiOrdenes{
     async newOrden(prod, mail){
-        return await Ordenes.newOrden(prod, mail)
+        return await Orden.newOrden(prod, mail)
     }
 }
 

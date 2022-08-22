@@ -13,14 +13,14 @@ const LocalStrategy = require('passport-local').Strategy
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-const Usuario = require('./daos/userDaos')
-const Carrito = require('./daos/carritoDaos')
-const Ordenes = require('./daos/ordenDaos')
+const Usuario = require('./persistencia/daos/userDaos')
+const Carrito = require('./persistencia/daos/carritoDaos')
+const Ordenes = require('./persistencia/daos/ordenDaos')
 const {PORT, MONGO_URL, SECRET} = require('./config')
-const logger = require('./logs/reqLogger')
+//const logger = require('./logs/reqLogger')
 const cluster = require('cluster')
 const script = require('bcrypt')
-const {registerUser} = require('./services/userJWT')
+//const {registerUser} = require('./services/userJWT')
 
 const CPUs = require('os').cpus().length
 
@@ -71,7 +71,7 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: MONGO_URL,
     mongoOptions: advancedOptions,
-    ttl: 30
+    ttl: 60
   }),
   secret: SECRET,
   resave: true,
@@ -179,7 +179,7 @@ app.use('/', routerPrincipal)
 
 /*----------- CHAT -----------*/
 
-const Mensaje = require('./daos/mensajeDaos.js')
+const Mensaje = require('./persistencia/daos/mensajeDaos.js')
 const mensaje = new Mensaje()
 let mensajes = []
 

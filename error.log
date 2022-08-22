@@ -76,3 +76,9 @@
 {"level":"error"}
 {"level":"error"}
 {"_message":"ordenes validation failed","errors":{"email":{"kind":"required","message":"Path `email` is required.","name":"ValidatorError","path":"email","properties":{"message":"Path `email` is required.","path":"email","type":"required"}}},"level":"error","message":"ordenes validation failed: email: Path `email` is required.","name":"ValidationError"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"{ id: '62fdaccb118d82f4ce90612e' }\" (type Object) at path \"_id\" for model \"productos\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"{ id: '62fdaccb118d82f4ce90612e' }\"","value":{"id":"62fdaccb118d82f4ce90612e"},"valueType":"Object"}

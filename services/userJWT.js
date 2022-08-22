@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const Usuario = require('../daos//userDaos')
-const Carrito = require('../daos//carritoDaos')
+const Usuario = require('../persistencia/daos/userDaos')
+const Carrito = require('../persistencia/daos/carritoDaos')
 const script = require('bcrypt')
 const {mail} = require('../mails//mail')
 

@@ -2,7 +2,7 @@ const { getApp } = require('firebase-admin/app')
 const mongoose = require('mongoose')
 const esquemaOrden = require('./modelsMDB/schemaOrden')
 const Producto = require('./productoDaos')
-const logger = require('../logs/reqLogger')
+const logger = require('../../logs/reqLogger')
 
 let instance = null
 

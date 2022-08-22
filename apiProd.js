@@ -1,4 +1,4 @@
-const Producto = require('./daos/productoDaos')
+const Producto = require('./persistencia/daos/productoDaos')
 const logger = require('./logs/reqLogger')
 
 const prod = new Producto()

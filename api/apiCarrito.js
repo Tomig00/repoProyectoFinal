@@ -1,4 +1,4 @@
-const {carritoDaos: Carrito} = require('../daos/mainDaos')
+const {carritoDaos: Carrito} = require('../persistencia/daos/mainDaos')
 const Carro = new Carrito()
 
 
@@ -21,6 +21,10 @@ class apiCarrito {
 
     async getProductos(carro){
         return await Carro.getProductos(carro)
+    }
+
+    async deleteProductoDeCarrito(idCarrito, idProducto){
+        return await Carro.deleteProductoDeCarrito(idCarrito, idProducto)
     }
 }
 

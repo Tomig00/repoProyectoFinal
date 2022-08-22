@@ -7,11 +7,11 @@ const sisCarrito = require('../controladores/carritoControler')
 
 routerCarrito.post('/', sisCarrito.newCarrito);
 
-routerCarrito.delete('/carrito/:id', sisCarrito.deleteCarrito);
+routerCarrito.get('/:id', sisCarrito.viewCartId);
 
 routerCarrito.post('/productos', sisCarrito.addToCarrito);
 
-routerCarrito.delete('/eliminarProducto/:idC', sisCarrito.deleteProdCart);
+routerCarrito.post('/eliminarProducto', sisCarrito.deleteProdCart);
 
 routerCarrito.post ('/addProdToCart', sisCarrito.addProdCart); 
 

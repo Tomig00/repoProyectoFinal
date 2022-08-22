@@ -1,4 +1,4 @@
-const {productosDaos: Producto} = require('../daos/mainDaos')
+const {productosDaos: Producto} = require('../persistencia/daos/mainDaos')
 const prod = new Producto()
 
 class apiProducto {
