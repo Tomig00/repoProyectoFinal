@@ -26,10 +26,8 @@ class Mensaje {
             mensaje.time = tiempo.toString()
             mensaje.tipo = tipo
             mensaje.pregunta = null
-            console.log(mensaje)
             await esquemaMsj.create(mensaje)
             const id = mensaje._id
-            //mongoose.disconnect()
             return id
         } catch (error) {
             logger.error(error)
@@ -46,9 +44,7 @@ class Mensaje {
             let tipo = "sistema"
             mensajeR.time = tiempo.toString()
             mensajeR.tipo = tipo
-            //console.log(mensajeR)
             await esquemaMsj.create(mensajeR)
-            //mongoose.disconnect()
             return mensajeR
         } catch (error) {
             console.log(error)
@@ -62,7 +58,6 @@ class Mensaje {
         }
         try {
             const msj = await esquemaMsj.find({ texto: { $ne: '' } })
-            //mongoose.disconnect()
             return msj
         } catch (error) {
             logger.error(error)
@@ -75,7 +70,6 @@ class Mensaje {
         }
         try {
             const msjId = await esquemaMsj.find({mail: email})
-            //mongoose.disconnect()
             return msjId
         } catch (error) {
             logger.error(error)

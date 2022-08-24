@@ -7,7 +7,6 @@ const { MONGO_URL } = require('../../config')
 
 let instance = null
 
-const Productos = new Producto()
 
 class Ordenes {
     

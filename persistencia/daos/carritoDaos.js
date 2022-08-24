@@ -51,7 +51,6 @@ class Carrito {
 
     async addProducto(idC, idP, cant) {
         try {
-            //console.log(cant + " " + "aca acac")
             if (!cant) {
                 cant = 1
             }
@@ -65,9 +64,7 @@ class Carrito {
             const prodInCarro = await esquemaCart.findById(cartObjectId)
             
             prodInCarro.productos.find(producto => {
-                console.log(producto._id + "   " + productoBD._id)
                 if (producto._id == productoBD._id) {
-                    console.log("ACA ADENTRO")
                     actualizar = producto
                     return existe = true
                 }else {
@@ -78,26 +75,21 @@ class Carrito {
 
 
             if (existe) {
-                console.log("El producto ya esta en el carrito")
                 const updateProds = prodInCarro.productos.map(producto => {
                     if (producto === actualizar) {
                         return { ...producto, cantidad: producto.cantidad + parseInt(cant) }
                     }
                     return producto
                 })
-                console.log("ACA ABAJO")
-                console.log(updateProds)
 
                 await esquemaCart.updateOne({_id: cartObjectId}, {$set: {productos: updateProds}})
             }else {
                 producto.cantidad = parseInt(cant)
-                console.log(producto + "aca aca 2")
+ 
                 const carrito = await esquemaCart.updateOne({_id: cartObjectId}, { $push: { productos: producto } })
             }
             
-            
             mongoose.disconnect()
-            //return carrito
         } catch (error) {
             console.log(error)
             logger.error(error)
@@ -118,19 +110,15 @@ class Carrito {
     async deleteProductoDeCarrito(idCarrito, idProducto) {
         try {
             await this.connectMDB()
-            console.log(idCarrito + " " + idProducto)
             let productoBD = await Productos.getByIdToCart(idProducto)
             const cartObjectId = mongoose.Types.ObjectId(idCarrito);
             let existe 
             let actualizar 
-            let nuevo
             await this.connectMDB()
             const prodInCarro = await esquemaCart.findById(cartObjectId)
             
             prodInCarro.productos.find(producto => {
-                console.log(producto._id + "   " + productoBD._id)
                 if (producto._id == productoBD._id) {
-                    console.log("ACA ADENTRO")
                     actualizar = producto
                     return existe = true
                 }else {
@@ -141,11 +129,8 @@ class Carrito {
 
 
             if (existe) {
-                console.log("El producto ya esta en el carrito")
                 const updateProds = prodInCarro.productos
                 const nuevo = updateProds.filter(producto => producto._id !== actualizar._id)
-                console.log("ACA ABAJO")
-                console.log(updateProds)
 
                 await esquemaCart.updateOne({_id: cartObjectId}, {$set: {productos: nuevo}})
             }else {

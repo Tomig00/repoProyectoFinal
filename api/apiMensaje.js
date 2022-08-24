@@ -1,5 +1,3 @@
-// const { mensajeDaos: Mensaje } = requiere('../daos/mainDaos')
-// const Mensaje = new Mensaje()
 
 const Mensaje = require('../persistencia/daos/mensajeDaos.js')
 class apiMensaje {

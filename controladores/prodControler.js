@@ -1,5 +1,4 @@
 
-//const {productosDaos: apiProducto} = require('../daos/mainDaos')
 const apiProducto = require('../api/apiProductos')
 
 const sisProd = {
@@ -10,9 +9,7 @@ const sisProd = {
         try {
             const producto = await prod.getByCategory(cat)
 
-            console.log(producto)
             if (producto.length == 0 ) {
-                console.log('no hay productos')
                 return res.status(404).render('prodNotFound')
             }
 
@@ -101,24 +98,3 @@ const sisProd = {
 }
 
 module.exports = sisProd
-
-
-
-
-// const Handlebars = require('handlebars')
-// const hbs = require('express-handlebars')
-// const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
-// const app = express()
-
-// app.set('views', './src/views')
-
-// app.engine(
-//   '.hbs',
-//   hbs.engine({
-//     defaultLayout: 'main',
-//     handlebars: allowInsecurePrototypeAccess(Handlebars),
-//     layoutsDir: './src/views/layouts',
-//     extname: '.hbs',
-//   })
-// )
-// app.set('view engine', '.hbs')

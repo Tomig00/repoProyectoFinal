@@ -1,6 +1,4 @@
 
-// const {carritoDaos: Carrito} = require('../daos/mainDaos')
-// const Carro = new Carrito()
 const {productos} = require('../apiProd')
 const apiOrdenes = require('../api/apiOrdenes')
 const apiCarrito = require('../api/apiCarrito')
@@ -8,7 +6,7 @@ const {mailCompra} = require('../mails/mail')
 const { error } = require('../logs/reqLogger')
 
 const Carro = new apiCarrito()
-//const Ordenes = require('../daos/ordenDaos')
+
 
 const sisCarrito = {
     newCarrito: async (req, res) => {
@@ -89,15 +87,11 @@ const sisCarrito = {
 
     addProdCart: async (req, res) => {
         const {id, cant} = req.body
-        //const idC = Handlebars.Utils.isArray(id)
-        // console.log(id + "esto")
-        // console.log(cant + "esto2")
-        // console.log("ACA IDC USER" + global.userDB.idC)
         const carro = global.userDB.idC
         const carrito = new apiCarrito()
       
         await carrito.addProducto(carro, id, cant)
-        //await carrito.addProducto(id)
+
         productos().then(productos => { 
           req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
         })
@@ -134,8 +128,6 @@ const sisCarrito = {
         const prod = JSON.stringify(productos)
         await orden.newOrden(prod, global.userDB.mail)
         mailCompra(global.userDB.nombre, global.userDB.mail, prod)
-        // sendWpp(global.userDB.nombre, global.userDB.mail, prod)
-        // wppComprador(global.userDB.telefono)
         res.redirect('/main')
     },
 }

@@ -7,7 +7,6 @@ const sisLogin = {
     },
     
     login: (req, res) => {
-        //console.log("aca")
           req.logOut(function(err) {
               if (err) { return next(err); }})
           res.render('login')
@@ -24,11 +23,8 @@ const sisLogin = {
     main: (req, res) => {
         //envio de productos a la vista datos.hbs
         productos().then(productos => { 
-            //console.log(productos)
             req.isAuthenticated() ? res.render('datos', {prod: productos}) : res.redirect('/login')
         })
-        //res.sendFile(path.resolve("public/index.html"))
-        //console.log(req.session)
     },
 
     logOut: (req, res) => {

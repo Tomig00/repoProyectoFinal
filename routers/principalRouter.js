@@ -22,12 +22,6 @@ routerPrincipal.use('/info', routerInfo)
 
 routerPrincipal.use('/chat', routerChat)
 
-// routerPrincipal.use((req, res, next) => {
-//   logger.warn(`Ruta: ${req.path} - Método: ${req.method}`),
-//   next()
-// })
-
-
 
 
 

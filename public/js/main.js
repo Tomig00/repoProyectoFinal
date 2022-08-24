@@ -85,7 +85,6 @@ function addMessage(e) {
     const mensaje = {
         mail: document.getElementById('mail').value,
         texto: document.getElementById('texto').value,
-        //tiempo: tiempo.toLocaleString(),
     };
     if (!mail.value){
         alert("Tienes que agregar un mail.")
@@ -111,17 +110,6 @@ async function response(e) {
     }
     socket.emit('nuevo-res', mensaje);
     return false;
-    
-    
-    
-    // // const mensaje = {
-    // //     object: document.getElementById('object').value,
-    // // };
-
-    // let object = document.getElementById('object').value;
-    // console.log(await object)
-    // //socket.emit('nuevo-msj', mensaje);
-    // return true;
 }
 
 function addProd(e) {
@@ -135,8 +123,3 @@ function addProd(e) {
     return false;
 }
 
-
-
-{/* <span><button onclick = "return response(object)">
-            Responder
-          </button> </span> */}
