@@ -7,7 +7,7 @@ const sisCarrito = require('../controladores/carritoControler')
 
 routerCarrito.post('/', sisCarrito.newCarrito);
 
-routerCarrito.get('/:id', sisCarrito.viewCartId);
+routerCarrito.get('/id/:id', sisCarrito.viewCartId);
 
 routerCarrito.post('/productos', sisCarrito.addToCarrito);
 

@@ -82,3 +82,14 @@
 {"level":"error"}
 {"level":"error"}
 {"kind":"ObjectId","message":"Cast to ObjectId failed for value \"{ id: '62fdaccb118d82f4ce90612e' }\" (type Object) at path \"_id\" for model \"productos\"","name":"CastError","path":"_id","reason":{},"stringValue":"\"{ id: '62fdaccb118d82f4ce90612e' }\"","value":{"id":"62fdaccb118d82f4ce90612e"},"valueType":"Object"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}
+{"level":"error"}

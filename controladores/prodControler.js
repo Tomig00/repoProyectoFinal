@@ -9,7 +9,13 @@ const sisProd = {
     
         try {
             const producto = await prod.getByCategory(cat)
-            //res.status(200).render('prodFound', { prod: producto})
+
+            console.log(producto)
+            if (producto.length == 0 ) {
+                console.log('no hay productos')
+                return res.status(404).render('prodNotFound')
+            }
+
             req.isAuthenticated() ? res.render('prodFound', {prod: producto}) : res.redirect('/login')
         } catch (error) {
             res.status(500).send({

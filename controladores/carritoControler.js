@@ -5,6 +5,7 @@ const {productos} = require('../apiProd')
 const apiOrdenes = require('../api/apiOrdenes')
 const apiCarrito = require('../api/apiCarrito')
 const {mailCompra} = require('../mails/mail')
+const { error } = require('../logs/reqLogger')
 
 const Carro = new apiCarrito()
 //const Ordenes = require('../daos/ordenDaos')
@@ -113,11 +114,16 @@ const sisCarrito = {
         }  
     },
 
-    viewCartId: async (req, res) => { 
+    viewCartId: async (req, res) => {
+
         const carrito = new apiCarrito()
-        const carro = global.userDB.idC
+        const carro = req.params.id
         const productos = await carrito.getProductos(carro)
+        if (!productos) {
+            return res.status(404).render('carritoNotFound')
+        }
         req.isAuthenticated() ? res.render('carritoFound', {prod: productos}) : res.redirect('/login')
+
     },
     
     buy: async (req, res) => {
